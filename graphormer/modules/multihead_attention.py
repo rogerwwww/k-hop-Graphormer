@@ -183,7 +183,7 @@ class MultiheadAttention(nn.Module):
             attn_weights += attn_bias.view(bsz * self.num_heads, tgt_len, src_len)
 
         if attn_mask is not None:
-            attn_mask = attn_mask.unsqueeze(0)
+            attn_mask = torch.repeat_interleave(attn_mask, self.num_heads, dim=0)
             attn_weights += attn_mask
 
         if key_padding_mask is not None:
@@ -426,7 +426,7 @@ class GDMultiheadAttention(nn.Module):
             attn_weights += attn_bias.view(bsz * self.num_heads, tgt_len, src_len)
 
         if attn_mask is not None:
-            attn_mask = attn_mask.unsqueeze(0)
+            attn_mask = torch.repeat_interleave(attn_mask, self.num_heads, dim=0)
             attn_weights += attn_mask
 
         if key_padding_mask is not None:

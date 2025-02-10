@@ -7,7 +7,7 @@ from torch_geometric.data import Dataset
 from .pyg_dataset import GraphormerPYGDataset
 import torch.distributed as dist
 from .zinc_with_resistance_distance import ZINC_RD
-from .airports import Airports
+# from .airports import Airports
 
 
 class MyQM7b(QM7b):
@@ -63,18 +63,19 @@ class MyZINCRD(ZINC_RD):
         if dist.is_initialized():
             dist.barrier()
 
-class MyAirPorts(Airports):
-    def download(self):
-        if not dist.is_initialized() or dist.get_rank() == 0:
-            super(MyAirPorts, self).download()
-        if dist.is_initialized():
-            dist.barrier()
-
-    def process(self):
-        if not dist.is_initialized() or dist.get_rank() == 0:
-            super(MyAirPorts, self).process()
-        if dist.is_initialized():
-            dist.barrier()
+# excluding AirPorts dataset as it throws errors
+# class MyAirPorts(Airports):
+#     def download(self):
+#         if not dist.is_initialized() or dist.get_rank() == 0:
+#             super(MyAirPorts, self).download()
+#         if dist.is_initialized():
+#             dist.barrier()
+#
+#     def process(self):
+#         if not dist.is_initialized() or dist.get_rank() == 0:
+#             super(MyAirPorts, self).process()
+#         if dist.is_initialized():
+#             dist.barrier()
 
 class MyMoleculeNet(MoleculeNet):
     def download(self):
@@ -115,18 +116,18 @@ class PYGDatasetLookupTable:
             inner_dataset = MyQM7b(root=root)
         elif name == "qm9":
             inner_dataset = MyQM9(root=root)
-        elif name == "airports":
-            with_airports = True
-            inner_dataset = MyAirPorts(root=root, name=params[0])
+        # elif name == "airports":
+        #     with_airports = True
+        #     inner_dataset = MyAirPorts(root=root, name=params[0])
         elif "zinc" in name:
             assert name in ["zinc-subset", "zinc-full", "zinc-rd-subset", "zinc-rd-full"]
             subset = name.split('-')[-1] == 'subset'
             with_resistance_distance = len(name.split('-')) == 3
             zinc_dataset_func = MyZINCRD if with_resistance_distance else MyZINC
             inner_dataset = zinc_dataset_func(root=root, subset=subset)
-            train_set = zinc_dataset_func(root=root, split="train")
-            valid_set = zinc_dataset_func(root=root, split="val")
-            test_set = zinc_dataset_func(root=root, split="test")
+            train_set = zinc_dataset_func(root=root, split="train", subset=subset)
+            valid_set = zinc_dataset_func(root=root, split="val", subset=subset)
+            test_set = zinc_dataset_func(root=root, split="test", subset=subset)
         elif name == "moleculenet":
             nm = None
             for param in params:

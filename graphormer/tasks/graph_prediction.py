@@ -239,7 +239,7 @@ class GraphPredictionTask(FairseqTask):
 
         target = TargetDataset(batched_data)
 
-        if self.with_synthetic_ap or self.with_synthetic_bridge:
+        if self.cfg.with_synthetic_ap or self.cfg.with_synthetic_bridge:
             dataset = NestedDictionaryDataset({
                 "nsamples": NumSamplesDataset(),
                 "net_input": {

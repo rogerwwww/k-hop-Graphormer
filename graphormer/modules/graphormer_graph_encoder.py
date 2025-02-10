@@ -72,6 +72,7 @@ class GraphormerGraphEncoder(nn.Module):
         traceable: bool = False,
         q_noise: float = 0.0,
         qn_block_size: int = 8,
+        subgraph_radius: int=10,
     ) -> None:
 
         super().__init__()
@@ -82,6 +83,7 @@ class GraphormerGraphEncoder(nn.Module):
         self.embedding_dim = embedding_dim
         self.apply_graphormer_init = apply_graphormer_init
         self.traceable = traceable
+        self.subgraph_radius = subgraph_radius
 
         self.graph_node_feature = GraphNodeFeature(
             num_heads=num_attention_heads,
@@ -195,7 +197,7 @@ class GraphormerGraphEncoder(nn.Module):
         perturb=None,
         last_state_only: bool = False,
         token_embeddings: Optional[torch.Tensor] = None,
-        attn_mask: Optional[torch.Tensor] = None,
+        # attn_mask: Optional[torch.Tensor] = None,
     ) -> Tuple[torch.Tensor, torch.Tensor]:
         is_tpu = False
         # compute padding mask. This is needed for multi-head attention
@@ -241,6 +243,12 @@ class GraphormerGraphEncoder(nn.Module):
         inner_states = []
         if not last_state_only:
             inner_states.append(x)
+
+        # apply mask to constraint message passing within subgraph_radius
+        # spatial_pos is the shortest path pairwise distance computed by floyd algorithm
+        attn_mask = torch.zeros((batched_data['spatial_pos'].shape[0], batched_data['spatial_pos'].shape[1] + 1, batched_data['spatial_pos'].shape[2] + 1),
+                                dtype=attn_bias.dtype, device=attn_bias.device)
+        attn_mask[:, 1:, 1:][batched_data['spatial_pos'] > self.subgraph_radius] = -float('inf')
 
         for layer in self.layers:
             x, _ = layer(
@@ -302,6 +310,7 @@ class GraphormerGDGraphEncoder(nn.Module):
         relu_mul_bias: bool = False,
         droppath_prob: float = 0.0,
         mul_bias_with_edge_feature: bool = False,
+        subgraph_radius: int = 10,
     ) -> None:
 
         super().__init__()
@@ -312,6 +321,7 @@ class GraphormerGDGraphEncoder(nn.Module):
         self.embedding_dim = embedding_dim
         self.apply_graphormer_init = apply_graphormer_init
         self.traceable = traceable
+        self.subgraph_radius = subgraph_radius
 
         self.no_share_bias = no_share_bias
         self.graph_node_feature = GraphNodeFeature(
@@ -483,7 +493,7 @@ class GraphormerGDGraphEncoder(nn.Module):
         perturb=None,
         last_state_only: bool = False,
         token_embeddings: Optional[torch.Tensor] = None,
-        attn_mask: Optional[torch.Tensor] = None,
+        # attn_mask: Optional[torch.Tensor] = None,
     ) -> Tuple[torch.Tensor, torch.Tensor]:
         is_tpu = False
         # compute padding mask. This is needed for multi-head attention
@@ -541,6 +551,12 @@ class GraphormerGDGraphEncoder(nn.Module):
         inner_states = []
         if not last_state_only:
             inner_states.append(x)
+
+        # apply mask to constraint message passing within subgraph_radius
+        # spatial_pos is the shortest path pairwise distance computed by floyd algorithm
+        attn_mask = torch.zeros((batched_data['spatial_pos'].shape[0], batched_data['spatial_pos'].shape[1] + 1, batched_data['spatial_pos'].shape[2] + 1),
+                                dtype=attn_bias.dtype, device=attn_bias.device)
+        attn_mask[:, 1:, 1:][batched_data['spatial_pos'] > self.subgraph_radius] = -float('inf')
 
         for i, layer in enumerate(self.layers):
             x, _ = layer(

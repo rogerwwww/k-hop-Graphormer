@@ -80,6 +80,12 @@ class GraphormerModel(FairseqEncoderModel):
             metavar="N",
             help="num encoder attention heads",
         )
+        parser.add_argument(
+            "--subgraph-radius",
+            type=int,
+            metavar="N",
+            help="radius of subgraph update",
+        )
 
         # Arguments related to input and output embeddings
         parser.add_argument(
@@ -179,6 +185,7 @@ class GraphormerEncoder(FairseqEncoder):
             pre_layernorm=args.pre_layernorm,
             apply_graphormer_init=args.apply_graphormer_init,
             activation_fn=args.activation_fn,
+            subgraph_radius = args.subgraph_radius,
         )
 
         self.share_input_output_embed = args.share_encoder_input_output_embed
