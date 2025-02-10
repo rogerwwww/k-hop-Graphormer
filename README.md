@@ -40,15 +40,17 @@ python setup.py build_ext --inplace
 ```
 
 ## Training k-hop Graphormers
-On Graph Representation Learning (ZINC dataset)
+**On Graph Representation Learning (ZINC dataset)**
 
 With Graphormer backbone (**k-hop Graphormer**):
+
 ``. examples/k-hop-Graphormer/train_k_hop_graphormer_zinc.sh``
 
 With Graphormer-GD backbone (**k-hop Graphormer-GD**):
+
 ``. examples/k-hop-Graphormer/train_k_hop_graphormer_gd_zinc.sh``
 
-Some practical notes:
+**Some practical notes:**
 1. Set ``subgraph_radius`` to test with different ``k``s on k-hop Graphormer
 2. When running multiple training jobs on the same node, please set different ``MASTER_PORT`` for different jobs
 
