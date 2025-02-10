@@ -1,6 +1,6 @@
 # On the Expressive Power of Subgraph Graph Neural Networks for Graphs with Bounded Cycles
 
-This repository is the official implementation of "[On the Expressive Power of Subgraph Graph Neural Networks for Graphs with Bounded Cycles](https://arxiv.org/abs/2502.03703)", forked from [Graphormer-GD](https://github.com/lsj2408/Graphormer-GD/issues), based on the official implementation of [Graphormer](https://github.com/microsoft/Graphormer) in [PyTorch](https://github.com/pytorch/pytorch).
+This repository is the official implementation of "[On the Expressive Power of Subgraph Graph Neural Networks for Graphs with Bounded Cycles](https://arxiv.org/abs/2502.03703)", forked from [Graphormer-GD](https://github.com/lsj2408/Graphormer-GD), based on the official implementation of [Graphormer](https://github.com/microsoft/Graphormer) in [PyTorch](https://github.com/pytorch/pytorch).
 
 ## Overview
 
