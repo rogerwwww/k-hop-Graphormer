@@ -53,22 +53,23 @@ With Graphormer-GD backbone (**k-hop Graphormer-GD**):
 **Some practical notes:**
 1. Set ``subgraph_radius`` to test with different ``k``s on k-hop Graphormer
 2. When running multiple training jobs on the same node, please set different ``MASTER_PORT`` for different jobs
+3. You shall be able to collect results, training and testing statistics with tensorboard
 
 ## Citation
 
 If you find this work useful, please kindly cite following papers:
 
-k-hop Graphormer
+**k-hop Graphormer**
 ```latex
 @article{chen2025expressive,
   title={On the Expressive Power of Subgraph Graph Neural Networks for Graphs with Bounded Cycles},
   author={Chen, Ziang and Zhang, Qiao and Wang, Runzhong},
-  journal={Arxiv preprint},
+  journal={arXiv preprint arXiv:2502.03703},
   year={2025}
 }
 ```
 
-Graphormer-GD
+**Graphormer-GD**
 ```latex
 @inproceedings{zhang2023rethinking,
   title={Rethinking the Expressive Power of {GNN}s via Graph Biconnectivity},
@@ -79,7 +80,7 @@ Graphormer-GD
 }
 ```
 
-Graphormer
+**Graphormer**
 ```latex
 @article{ying2021transformers,
   title={Do transformers really perform badly for graph representation?},
