@@ -16,7 +16,7 @@ ulimit -c unlimited
 [ -z "${seed}" ] && seed=1
 [ -z "${clip_norm}" ] && clip_norm=5
 [ -z "${data_path}" ] && data_path="./"
-[ -z "${save_path}" ] && save_path="./"
+[ -z "${save_path}" ] && save_path="./results"
 [ -z "${dropout}" ] && dropout=0.0
 [ -z "${act_dropout}" ] && act_dropout=0.1
 [ -z "${attn_dropout}" ] && attn_dropout=0.1
@@ -27,7 +27,7 @@ ulimit -c unlimited
 [ -z "${OMPI_COMM_WORLD_SIZE}" ] && OMPI_COMM_WORLD_SIZE=1
 
 [ -z "$save_prefix" ] && save_prefix='k-hop'
-[ -z "${dataset_name}" ] && dataset_name="zinc-rd-subset"
+[ -z "${dataset_name}" ] && dataset_name="zinc-rd-full"
 
 [ -z "${relu_mul_bias}" ] && relu_mul_bias="false"
 [ -z "${one_init_mul_bias}" ] && one_init_mul_bias="false"
@@ -71,13 +71,13 @@ echo -e "\n\n"
 echo "======================================ENV======================================"
 echo 'Environment'
 ulimit -c unlimited;
-echo '\n\nhostname'
+echo -e "\n\nhostname"
 hostname
-echo '\n\nnvidia-smi'
+echo -e "\n\nnvidia-smi"
 nvidia-smi
-echo '\n\nls -alh'
+echo -e "\n\nls -alh"
 ls -alh
-echo -e '\n\nls ~ -alh'
+echo -e "\n\nls ~ -alh"
 ls ~ -alh
 echo "torch version"
 python -c "import torch; print(torch.__version__)"
